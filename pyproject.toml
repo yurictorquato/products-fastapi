@@ -1,0 +1,11 @@
+[project]
+name = "products-fastapi"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "basedpyright>=1.36.1",
+    "fastapi>=0.124.4",
+    "ruff>=0.14.9",
+    "uvicorn>=0.38.0",
+]
