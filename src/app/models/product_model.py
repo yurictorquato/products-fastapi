@@ -1,10 +1,10 @@
 from sqlalchemy import Float, Integer, String
 from sqlalchemy.orm import mapped_column, Mapped
 
-from app.base.models import Base
+from app.models.base_model import Base
 
 
-class ProductModel(Base):
+class ProductResponse(Base):
     __tablename__ = "tb_produtos"
 
     name: Mapped[str] = mapped_column(String(25), nullable=False)

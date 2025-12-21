@@ -1,37 +1,46 @@
 from uuid import UUID
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.product_model import ProductModel
 from app.repositories.product_repository import ProductRepository
-from app.schemas.product_schema import ProductRequest, ProductUpdate
+from app.schemas.product_schema import ProductRequest, ProductUpdate, ProductResponse
 
 
 class ProductService:
     """Camada responsável pela lógica de negócio dos produtos."""
 
-    repository: ProductRepository
-
     def __init__(self, db_session: AsyncSession) -> None:
-        self.repository = ProductRepository(db_session)
+        self.repository: ProductRepository = ProductRepository(db_session)
 
-    async def create_product(self, product_request: ProductRequest) -> ProductModel:
-        """Cria um novo produto."""
-        return await self.repository.create_product(product_request)
+    async def create_product(self, product_request: ProductRequest) -> ProductResponse:
+        """Cria um produto."""
+        product_model = await self.repository.save(product_request)
 
-    async def get_product_by_id(self, product_id: UUID) -> ProductModel | None:
+        return ProductResponse.model_validate(product_model)
+
+    async def get_product_by_id(self, product_id: UUID) -> ProductResponse | None:
         """Busca um produto pelo ID."""
-        return await self.repository.get_product_by_id(product_id)
+        product_model = await self.repository.find_by_id(product_id)
 
-    async def list_all_products(self) -> list[ProductModel]:
+        return ProductResponse.model_validate(product_model) if product_model else None
+
+    async def list_all_products(self) -> list[ProductResponse]:
         """Lista todos os produtos."""
-        return await self.repository.list_all_products()
+        products_model = await self.repository.find_all()
+
+        return [
+            ProductResponse.model_validate(product)
+            for product in products_model
+        ]
 
     async def update_product(
-        self, product_id: UUID, product_request: ProductUpdate
-    ) -> ProductModel | None:
+            self, product_id: UUID, product_request: ProductUpdate
+    ) -> ProductResponse | None:
         """Atualiza um produto existente."""
-        return await self.repository.update_product(product_id, product_request)
+        product_model = await self.repository.update(product_id, product_request)
+
+        return ProductResponse.model_validate(product_model) if product_model else None
 
     async def delete_product(self, product_id: UUID) -> bool:
         """Deleta um produto pelo ID."""
-        return await self.repository.delete_product(product_id)
+        return await self.repository.delete(product_id)

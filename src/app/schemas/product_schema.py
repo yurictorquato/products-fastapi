@@ -2,7 +2,7 @@ from typing import Annotated
 
 from pydantic import Field, PositiveFloat, PositiveInt, UUID4
 
-from app.schemas.base import BaseSchema
+from app.schemas.base_schema import BaseSchema
 
 
 class ProductRequest(BaseSchema):
