@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from pydantic import Field, PositiveFloat, PositiveInt, UUID4
+from pydantic import UUID4, Field, PositiveFloat, PositiveInt
 
 from app.schemas.base_schema import BaseSchema
 

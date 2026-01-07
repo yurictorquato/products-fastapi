@@ -1,3 +1,4 @@
+from app.exceptions.exceptions import ProductNotFoundException
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,29 +19,35 @@ class ProductService:
 
         return ProductResponse.model_validate(product_model)
 
-    async def get_product_by_id(self, product_id: UUID) -> ProductResponse | None:
+    async def get_product_by_id(self, product_id: UUID) -> ProductResponse:
         """Busca um produto pelo ID."""
         product_model = await self.repository.find_by_id(product_id)
 
-        return ProductResponse.model_validate(product_model) if product_model else None
+        if not product_model:
+            raise ProductNotFoundException(product_id)
+
+        return ProductResponse.model_validate(product_model)
 
     async def list_all_products(self) -> list[ProductResponse]:
         """Lista todos os produtos."""
         products_model = await self.repository.find_all()
 
-        return [
-            ProductResponse.model_validate(product)
-            for product in products_model
-        ]
+        return [ProductResponse.model_validate(product) for product in products_model]
 
     async def update_product(
-            self, product_id: UUID, product_request: ProductUpdate
-    ) -> ProductResponse | None:
+        self, product_id: UUID, product_request: ProductUpdate
+    ) -> ProductResponse:
         """Atualiza um produto existente."""
         product_model = await self.repository.update(product_id, product_request)
 
-        return ProductResponse.model_validate(product_model) if product_model else None
+        if not product_model:
+            raise ProductNotFoundException(product_id)
 
-    async def delete_product(self, product_id: UUID) -> bool:
+        return ProductResponse.model_validate(product_model)
+
+    async def delete_product(self, product_id: UUID) -> None:
         """Deleta um produto pelo ID."""
-        return await self.repository.delete(product_id)
+        deleted = await self.repository.delete(product_id)
+
+        if not deleted:
+            raise ProductNotFoundException(product_id)

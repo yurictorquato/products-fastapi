@@ -4,7 +4,7 @@ from sqlalchemy.orm import mapped_column, Mapped
 from app.models.base_model import Base
 
 
-class ProductResponse(Base):
+class ProductModel(Base):
     __tablename__ = "tb_produtos"
 
     name: Mapped[str] = mapped_column(String(25), nullable=False)

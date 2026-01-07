@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -21,6 +21,7 @@ def get_product_service(
 @router.post(
     path="/",
     summary="Cria um novo produto",
+    description="Cria um novo produto com nome, preço e quantidade",
     status_code=status.HTTP_201_CREATED,
     response_model=ProductResponse,
 )
@@ -35,6 +36,7 @@ async def create_product(
 @router.get(
     path="/{product_id}",
     summary="Consulta um produto pelo ID",
+    description="Retorna os dados de um produto específico pelo seu ID",
     status_code=status.HTTP_200_OK,
     response_model=ProductResponse,
 )
@@ -43,20 +45,13 @@ async def get_product_by_id(
     service: ProductService = Depends(get_product_service),
 ):
     """Busca um produto pelo ID."""
-    product = await service.get_product_by_id(product_id)
-
-    if not product:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Produto com ID {product_id} não encontrado.",
-        )
-
-    return product
+    return await service.get_product_by_id(product_id)
 
 
 @router.get(
     path="/",
     summary="Consulta todos os produtos",
+    description="Retorna uma lista com todos os produtos cadastrados",
     status_code=status.HTTP_200_OK,
     response_model=list[ProductResponse],
 )
@@ -68,6 +63,7 @@ async def list_all_products(service: ProductService = Depends(get_product_servic
 @router.patch(
     path="/{product_id}",
     summary="Atualiza um produto pelo ID",
+    description="Atualiza o preço e/ou a quantidade de um produto existente",
     status_code=status.HTTP_200_OK,
     response_model=ProductResponse,
 )
@@ -77,32 +73,17 @@ async def update_product(
     service: ProductService = Depends(get_product_service),
 ):
     """Atualiza preço e/ou quantidade de um produto."""
-    product = await service.update_product(product_id, product_update)
-
-    if not product:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Produto com ID {product_id} não encontrado",
-        )
-
-    return product
+    return await service.update_product(product_id, product_update)
 
 
 @router.delete(
     path="/{product_id}",
     summary="Deleta um produto pelo ID",
+    description="Remove um produto do sistema pelo seu ID",
     status_code=status.HTTP_204_NO_CONTENT,
 )
 async def delete_product(
     product_id: UUID, service: ProductService = Depends(get_product_service)
 ):
     """Deleta um produto."""
-    product_to_delete = await service.delete_product(product_id)
-
-    if not product_to_delete:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Produto com ID {product_id} não encontrado",
-        )
-
-    return None
+    await service.delete_product(product_id)
