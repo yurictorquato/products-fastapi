@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from app.core.database import get_db_session
-from app.schemas.product_schema import ProductRequest, ProductResponse, ProductUpdate
-from app.services.product_service import ProductService
+from app.core import get_db_session
+from app.schemas import ProductRequest, ProductResponse, ProductUpdate
+from app.services import ProductService
 
 router = APIRouter()
 

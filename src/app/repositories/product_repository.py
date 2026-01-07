@@ -1,9 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.product_model import ProductModel
-from app.repositories.base_repository import BaseRepository
-from app.schemas.product_schema import ProductRequest, ProductUpdate
+from app.models import ProductModel
+from app.repositories import BaseRepository
+from app.schemas import ProductRequest, ProductUpdate
 
 
 class ProductRepository(BaseRepository[ProductModel, ProductRequest, ProductUpdate]):

@@ -1,10 +1,10 @@
-from app.exceptions.exceptions import ProductNotFoundException
+from app.exceptions import ProductNotFoundException
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.repositories.product_repository import ProductRepository
-from app.schemas.product_schema import ProductRequest, ProductUpdate, ProductResponse
+from app.repositories import ProductRepository
+from app.schemas import ProductRequest, ProductUpdate, ProductResponse
 
 
 class ProductService:

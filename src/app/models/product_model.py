@@ -1,7 +1,7 @@
 from sqlalchemy import Float, Integer, String
 from sqlalchemy.orm import mapped_column, Mapped
 
-from app.models.base_model import Base
+from app.models import Base
 
 
 class ProductModel(Base):
