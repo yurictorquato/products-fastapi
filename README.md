@@ -215,7 +215,7 @@ pytest --cov=src tests/
 **Yuri Torquato**
 
 - GitHub: [@yurictorquato](https://github.com/yurictorquato)
-- LinkedIn: [Seu perfil LinkedIn]
+- LinkedIn: www.linkedin.com/in/yuri-torquato-b824b0283
 
 ---
 
