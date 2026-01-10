@@ -5,7 +5,7 @@ from app.models import Base
 
 
 class ProductModel(Base):
-    __tablename__ = "tb_produtos"
+    __tablename__ = "tb_products"
 
     name: Mapped[str] = mapped_column(String(25), nullable=False)
     price: Mapped[float] = mapped_column(Float, nullable=False)
