@@ -109,7 +109,7 @@ class ClientBase(BaseSchema):
             examples=[
                 "Rua Icapuí, 127",
             ],
-            max_length=50,
+            max_length=100,
         ),
     ]
 
